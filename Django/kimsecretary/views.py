@@ -34,13 +34,23 @@ def message(request):
 	play_questions = ['뭐하지','머하지','모하지','뭐하지?','머하지?','모하지?'] #질문 형식
 	play_category = ['영화 추천','노래 추천','장소 추천'] #카테고리
 	movie_genre = ['SF','로멘스','공포','액션','애니메이션','히어로','재난','코믹','스릴러'] #영화 장르	
-	music_list = ['닐로 - 지나오다','멜로망스 - 동화','테이 - 같은 베개','자우림-있지']
+	movie_SF = ['인터스텔라','그래비티','라이프','인셉션']
+	movie_romance = ['뷰티인사이드','그시절 우리가 좋아했던 소녀']
+	movie_horror = ['곤지암','애나벨']
+	movie_action = ['마녀','테이큰','미션임파서블','범죄도시']
+	movie_ani = ['겨울왕국','미니언즈']
+	movie_hero = ['어벤저스','아이언맨']
+	movie_disaster = ['해운대','타워','판도라','볼케이노','투모로우','2012','지오스톰']
+	movie_comic = ['럭키','삼총사','청년경찰']
+	movie_thriller = ['추격자','황해','괴물']
+	movie = [movie_SF,movie_romance,movie_horror,movie_action,movie_ani,movie_hero,movie_disaster,movie_comic,movie_thriller]
+	music_list = ['닐로 - 지나오다','멜로망스 - 동화','테이 - 같은 베개','자우림 - 있지','하동균 - 그녀를 사랑해줘요']
 	place_list = ['홍대','신촌','안산','동규네 집','혜린이네 집','강남','이태원']	
 
 	if return_str == '김비서!!!!!!!!':
         	return JsonResponse({
                 	'message': {
-                        'text': ' 네 회장님, 부르셨나요? '
+                        'text': ' 네 회장님, 부르셨나요? 도움말을 원하시면 "도움말"이라고 크게 외치면서 입력해주세요.'
                 	},
                 	'keyboard': {
                         'type': 'text',      
@@ -49,13 +59,31 @@ def message(request):
 	elif return_str == '너 할 줄 아는 게 뭐야?!!!!!':
 		return JsonResponse({
                 	'message': {
-                		'text': ' 회장님의 식사 메뉴 결정, 스케쥴 결정, 그 외 잡다한 결정을 도와드리고 있습니다.  '
+                		'text': ' 회장님의 식사 메뉴 결정, 스케쥴 결정, 그 외 잡다한 결정을 도와드리고 있습니다. 도움말을 원하시면 "도움말" 이라고 크게 외쳐주세요! '
                 	},
                 	'keyboard': {
                         'type': 'text',      
                 	}
      	   	})
-	
+	elif return_str=='부모님'
+		return JsonResponse({
+                	'message': {
+                    		'text': ' 중앙대학교 생명과학&컴퓨터공학부 16학번 김혜린, 컴퓨터공학부 14학번 이동규 '
+			},
+                	'keyboard': {
+                      	'type' : 'text',
+                	}
+     	   	})
+	elif return_str == '도움말':
+		return JsonResponse({
+                	'message': {
+                    		'text': ' 음식 추천 : 뭐먹지 \n 놀 것 추천 : 뭐하지 \n 도움말 : 도움말 '
+			},
+                	'keyboard': {
+                      	'type' : 'text',
+                	}
+     	   	})
+
 	#먹을 것 추천
 	elif return_str in eat_questions:
 		return JsonResponse({
@@ -147,6 +175,7 @@ def message(request):
                       	  			'type' : 'text' , 
                 			}
      	   		})
+
 		elif return_str == '노래 추천':
 			return JsonResponse({
                 		'message': {
@@ -160,12 +189,21 @@ def message(request):
 		else:
 			return JsonResponse({
                 		'message': {
-                    	    'text': ' 오늘은 ' + rand(place_list) + ' 가볼까요?'
+                    	    	'text': ' 오늘은 ' + rand(place_list) + ' 가볼까요?'
                 			},
                 			'keyboard': {
                       	  			'type' : 'text',  
                 			}
      	   		})
+	elif return_str in movie_genre:
+		return JsonResponse({
+                	'message': {
+                    	'text': ' 오늘은 '+ rand(movie[movie_genre.index(return_str)]) +' 어떠세요?'
+                		},
+                		'keyboard': {
+                      		'type' : 'text' , 
+                		}
+     	   	})
 	#잘못된 input 예외처리
 	else:
 		if input_type == 'photo':
