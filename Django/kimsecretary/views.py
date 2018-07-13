@@ -50,7 +50,7 @@ def message(request):
 	if return_str == '김비서!!!!!!!!':
         	return JsonResponse({
                 	'message': {
-                        'text': ' 네 회장님, 부르셨나요? '
+                        'text': ' 네 회장님, 부르셨나요? 궁금하신 사항 있으시다면 "도움말"을 눌러주세요 '
                 	},
                 	'keyboard': {
                         'type': 'text',      
@@ -59,7 +59,25 @@ def message(request):
 	elif return_str == '너 할 줄 아는 게 뭐야?!!!!!':
 		return JsonResponse({
                 	'message': {
-                		'text': ' 회장님의 식사 메뉴 결정, 스케쥴 결정, 그 외 잡다한 결정을 도와드리고 있습니다.  '
+                		'text': ' 회장님의 식사 메뉴 결정, 스케쥴 결정, 그 외 잡다한 결정을 도와드리고 있습니다. 더 궁금하신 사항은 "도움말"을 참고해주세요.  '
+                	},
+                	'keyboard': {
+                        'type': 'text',      
+                	}
+     	   	})
+	elif return_str == '개발자':
+		return JsonResponse({
+                	'message': {
+                		'text': ' 중앙대학교 \n 생명과학 컴퓨터공학 16학번 김혜린 \n 컴퓨터공학 14학번 이동규 '
+                	},
+                	'keyboard': {
+                        'type': 'text',      
+                	}
+     	   	})
+	elif return_str == '도움말':
+		return JsonResponse({
+                	'message': {
+                		'text': ' 음식 추천 : 뭐먹지 \n 놀 것 추천 : 뭐하지 '
                 	},
                 	'keyboard': {
                         'type': 'text',      
