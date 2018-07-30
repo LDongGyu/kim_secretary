@@ -68,7 +68,7 @@ def message(request):
 		current_msg = return_str
 		return JsonResponse({
                 	'message': {
-                		'text': '현재 제공하고 있는 기능은 [음식],[놀 것] 추천입니다. 질문형식은 다음과 같습니다. \n ex) 뭐먹지? , 머먹징 , 뭐하지? , 모하쥥 등등'
+                		'text': '질문형식은 다음과 같습니다. \n 1. ~/~/~ 중 뭐할까 or 골라줘 \n 2. ~ 할까 말까 or 볼까 말까 등 \n 3. 뭐하지 or 뭐먹지 등 \n 형식에 맞춰 질문해주시기 바랍니다!'
                 	},
                 	'keyboard': {
                         'type': 'text',      
