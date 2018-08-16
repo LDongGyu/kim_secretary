@@ -25,7 +25,6 @@ def message(request):
 	global current_msg
 	global category
 	global terminal
-
 	# input이 json 형식으로 들어온 것을 parsing
 	message = ((request.body).decode('utf-8'))
 	return_json_str = json.loads(message)
@@ -36,7 +35,6 @@ def message(request):
 	play_Handler = PlayDB()	# 놀 것 추천 클래스
 	eat_Handler = EatDB()
 	question = DoOrNot()
-
 	parser_rank = Parser()
 	
 	play_Question = re.compile('(뭐|모|머)(하|할)') # 질문에 '하'가 들어가면 '놀 것 추천'	
@@ -51,7 +49,6 @@ def message(request):
                         'type': 'text',      
                 	}
      	   	})
-
 
 		else:
 			return_str = current_msg
@@ -115,7 +112,6 @@ def message(request):
      	   	})
 
 
-
 	elif question.isQuestionOf(return_str):
 		current_msg = return_str
 		return JsonResponse({
@@ -157,10 +153,9 @@ def message(request):
 		current_msg = return_str
 		return JsonResponse({
                 	'message': {
-                		'text': ' 싫어는 거절하겠습니다. 다시 골라주세요. '
+                        'text': '다음 중에서 원하시는 음식 종류를 골라주세요!'
                 	},
                 	'keyboard': {
-<<<<<<< HEAD
                       	'type' : 'buttons',
 			'buttons' : ['한식','일식','양식','중식','아무거나']      
                 	}
@@ -181,71 +176,6 @@ def message(request):
 	elif (return_str == '아무거나') and (category == 1):
 		eat_rand = rand(eat_Handler.eat_all)
 		terminal = True
-=======
-                        'type': 'text',      
-                	}
-     	   	})
-
-	elif question.isQuestionOf(return_str):
-		return JsonResponse({
-                	'message': {
-                    	'text': question.isQuestionOf_answer(return_str)
-                		},
-                		'keyboard': {
-                      		'type' : 'text' , 
-                		}
-     	   	})
-
-	elif question.isQuestion(return_str):
-		return JsonResponse({
-                	'message': {
-                    	'text': question.isQuestion_answer(return_str)
-                		},
-                		'keyboard': {
-                      		'type' : 'text' , 
-                		}
-     	   	})
-
-	#먹을 것 추천
-	elif return_str in eat_Handler.eat_questions:
-		current_msg = return_str
-		return JsonResponse({
-                	'message': {
-                        'text': '다음 중에서 원하시는 음식 종류를 골라주세요!'
-                	},
-                	'keyboard': {
-                      	'type' : 'buttons',
-			'buttons' : ['한식','일식','양식','중식','아무거나!']      
-                	}
-     	   	})
-
-	elif return_str in eat_Handler.eat_category:
-		current_msg = return_str
-		return JsonResponse({
-			'message': {
-			'text' : '오늘의 식사 메뉴로는 '+ rand(eat_Handler.getEat(return_str))+' 어때요?'
-			},
-			'keyboard': {
-                        'type': 'text',      
-                	}
-		})
-
-	elif return_str == '아무거나!':
-		eat_rand = rand(eat_Handler.eat_all)
-		current_msg = return_str
-		return JsonResponse({
-                	'message': {
-                    	'text': ' 오늘은 '+ rand(eat_rand) +' 어떠세요?'
-                		},
-                		'keyboard': {
-                      		'type' : 'text' , 
-                		}
-     	   	})
-
-	
-	#놀 것 추천
-	elif play_Question.search(return_str):
->>>>>>> 1374265161adbbb3935c86c9d3c29c0e34c703f4
 		current_msg = return_str
 		return JsonResponse({
                 	'message': {
@@ -260,12 +190,8 @@ def message(request):
 	#놀 것 추천
 	elif return_str in play_Handler.play_category:
 		current_msg = return_str
-<<<<<<< HEAD
 		if (return_str == '영화 추천') and (category == 5):
 			category = 2
-=======
-		if return_str == '영화 추천':
->>>>>>> 1374265161adbbb3935c86c9d3c29c0e34c703f4
 			return JsonResponse({
                 		'message': {
                     	    	'text': ' 어떤 장르가 좋으세요? '
@@ -300,25 +226,16 @@ def message(request):
 		else:
 			return JsonResponse({
                 		'message': {
-<<<<<<< HEAD
                     	    'text': ' 갑자기 무슨 소리세요 회장님; '
-=======
-                    	    'text': ' 오늘은 ' + rand(play_Handler.place_list) + ' 가볼까요?'
->>>>>>> 1374265161adbbb3935c86c9d3c29c0e34c703f4
                 			},
                 			'keyboard': {
                       	  			'type' : 'text',  
                 			}
      	   		})
-<<<<<<< HEAD
 
 	elif (return_str in play_Handler.movie_genre) and (category == 2):
 		current_msg = return_str
 		terminal = True
-=======
-	elif return_str in play_Handler.movie_genre:
-		current_msg = return_str
->>>>>>> 1374265161adbbb3935c86c9d3c29c0e34c703f4
 		return JsonResponse({
                 	'message': {
                     	'text': ' 오늘은 '+ rand(play_Handler.getMovie(return_str)) +' 어떠세요?'
@@ -328,7 +245,6 @@ def message(request):
                 		}
      	   	})
 
-<<<<<<< HEAD
 	elif return_str == "좋아":
 		if terminal == True:
 			terminal = False
@@ -355,8 +271,6 @@ def message(request):
 
      	   	})
 
-=======
->>>>>>> 1374265161adbbb3935c86c9d3c29c0e34c703f4
 
 	#잘못된 input 예외처리
 	else:
