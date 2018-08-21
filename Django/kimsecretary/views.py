@@ -90,6 +90,16 @@ def message(request):
 				'type' : 'text' , 
 				}})
 
+	elif return_str == "멜론순위":
+		return JsonResponse({
+			'message': {
+			'text': "요즘 인기있는 노래 순위입니다.\n\n"+ parser_rank.melon_ranking()
+				},
+				'keyboard': {
+				'type' : 'text' , 
+				}})
+
+
 	elif return_str == '개발자':
 		current_msg = return_str
 		return JsonResponse({

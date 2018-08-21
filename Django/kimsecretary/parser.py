@@ -21,15 +21,14 @@ class Parser:
 
 	def music_ranking(self):
 		rank = ''
-		req = requests.get('https://www.melon.com')
+		req = requests.get('http://www.genie.co.kr/')
 		soup = BeautifulSoup(req.content, "html.parser")
 		rank_count = 1
-		div = soup.find("div",{"class":"list_wrap typeRealtime"})
-		p = div.find_all("p",{"class":"song"})
+		tbody = soup.find("tbody")
+		a = tbody.find_all("a",{"class":"title ellipsis"})
 
-		for s in p:
-			temp= s.find("a",{"class":"ellipsis mlog"})
-			rank = rank + str(rank_count) +" "+ temp.text + "\n"
+		for s in a:
+			rank = rank + str(rank_count) +" "+ s.text + "\n"
 			rank_count +=1
 
 		return rank
