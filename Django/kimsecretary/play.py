@@ -22,6 +22,12 @@ class PlayDB:
 		select = self.movie_all[self.movie_genre.index(genre)]
 		return select
 
+<<<<<<< HEAD
+=======
+	def getQuestions(self):
+		return self.play_questions
+
+>>>>>>> 80a3e5d78fc4584f3f8af39bfa45bd82241c5975
 	def getCategory(self):
 		return self.play_category
 
