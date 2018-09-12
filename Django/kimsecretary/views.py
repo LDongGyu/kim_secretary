@@ -10,8 +10,15 @@ import random
 from kimsecretary.play import PlayDB
 from kimsecretary.eat import EatDB
 from kimsecretary.doOrNot import DoOrNot
+#from kimsecretary.bamboo import Bamboo
+from kimsecretary.parser import *
+
 current_msg = '안녕'
 category = 0
+terminal = False
+bamboo_num = 0
+
+
 
 def keyboard(request):
 
@@ -22,6 +29,8 @@ def message(request):
 
 	global current_msg
 	global category
+	global terminal
+	global bamboo_num
 
 	# input이 json 형식으로 들어온 것을 parsing
 	message = ((request.body).decode('utf-8'))
@@ -33,6 +42,21 @@ def message(request):
 	play_Handler = PlayDB()	# 놀 것 추천 클래스
 	eat_Handler = EatDB()
 	question = DoOrNot()
+	parser_rank = Parser()
+	#bamboo = Bamboo()
+
+	play_Question = re.compile('(뭐|모|머)(하|할)') # 질문에 '하'가 들어가면 '놀 것 추천'
+
+	if return_str == "싫어":
+		if terminal == False:
+			return JsonResponse({
+                	'message': {
+                        'text': ' 전 조아요♡ '
+                	},
+                	'keyboard': {
+                        'type': 'text',
+                	}
+     	   	})
 
 	play_Question = re.compile('(뭐|모|머)(하|할)') # 질문에 '하'가 들어가면 '놀 것 추천'
 
@@ -59,6 +83,33 @@ def message(request):
                         'type': 'text',
                 	}
      	   	})
+	elif return_str == "영화순위":
+		return JsonResponse({
+               		'message': {
+                		'text': "요즘 상영중인 영화 순위입니다.\n\n"+ parser_rank.movie_ranking()
+               			},
+               			'keyboard': {
+                     			'type' : 'text' ,
+               			}})
+	elif return_str == "노래순위":
+		return JsonResponse({
+			'message': {
+			'text': "요즘 인기있는 노래 순위입니다.\n\n"+ parser_rank.music_ranking()
+				},
+				'keyboard': {
+				'type' : 'text' ,
+				}})
+
+	elif return_str == "멜론순위":
+		return JsonResponse({
+			'message': {
+			'text': "요즘 인기있는 노래 순위입니다.\n\n"+ parser_rank.melon_ranking()
+				},
+				'keyboard': {
+				'type' : 'text' ,
+				}})
+
+
 	elif return_str == '개발자':
 		current_msg = return_str
 		return JsonResponse({
@@ -79,6 +130,80 @@ def message(request):
                         'type': 'text',
                 	}
      	   	})
+
+
+	#elif return_str =='대나무숲':
+	#	current_msg = return_str
+	#	return JsonResponse({
+        #        	'message': {
+        #               'text': '다음 중에서 골라주세요!'
+        #        		},
+        #        		'keyboard': {
+        #              	  		'type' : 'buttons',
+	#			'buttons' : ['읽기','쓰기']
+        #        		}
+     	#   	})
+
+	#elif return_sr == '쓰기':
+	#	category = 6
+	#	current_msg = return_str
+	#	return JsonResponse({
+	#			'message':{
+	#				'text': '대나무 숲에 보낼 내용을 작성해주세요.'
+	#			},
+	#			'keyboard':{
+	#				'type':'text',
+	#			}
+	#	})
+
+	#elif category == 6:
+	#	bamboo_num = bamboo_num + 1
+	#	bamboo.file_write(return_str,bamboo_num)
+	#	return JsonResponse({
+	#		'message':{
+	#			'text': '대나무 숲에 저장되었습니다.'
+	#		},
+	#		'keyboard':{
+	#			'type': 'text'
+	#		}
+	#	})
+
+
+	#elif return_str == '읽기':
+	#	current_msg = return_str
+	#	return JsonResponse({
+        #        	'message': {
+	#               'text': '다음 중에서 골라주세요!'
+             #   		},
+	# 		'keyboard': {
+             #         	  		'type' : 'buttons',
+	#			'buttons' : ['글 번호','키워드','랜덤']
+	#  		}
+	#	})
+
+	#elif return_str == "글 번호로 검색":
+	#	category = 7
+	#	current_msg = return_str
+	#	return JsonResponse({
+        #        	'message': {
+        #        		'text': '현재 작성된 글은 1번~'+bamboo_num+'번 입니다. 숫자로 입력해주세요.'
+        #        	},
+        #        	'keyboard': {
+        #                'type': 'text',
+        #        	}
+     	#   	})
+
+	#elif return_str == "키워드로 검색":
+	#	category = 8
+	#	current_msg = return_str
+	#	return JsonResponse({
+        #        	'message': {
+        #        		'text': '여기에 키워드로 검색 함수 return 해주기'
+        #        	},
+        #        	'keyboard': {
+        #                'type': 'text',
+        #        	}
+     	#   	})
 
 
 	elif question.isQuestionOf(return_str):
@@ -126,12 +251,13 @@ def message(request):
                 	},
                 	'keyboard': {
                       	'type' : 'buttons',
-			'buttons' : ['한식','일식','양식','중식','아무거나!']
+			'buttons' : ['한식','일식','양식','중식','아무거나']
                 	}
      	   	})
 
 	elif (return_str in eat_Handler.eat_category) and (category == 1):
 		current_msg = return_str
+		terminal = True
 		return JsonResponse({
 			'message': {
 			'text' : '오늘의 식사 메뉴로는 '+ rand(eat_Handler.getEat(return_str))+' 어때요?'
@@ -141,8 +267,9 @@ def message(request):
                 	}
 		})
 
-	elif (return_str == '아무거나!') and (category == 1):
+	elif (return_str == '아무거나') and (category == 1):
 		eat_rand = rand(eat_Handler.eat_all)
+		terminal = True
 		current_msg = return_str
 		return JsonResponse({
                 	'message': {
@@ -167,8 +294,9 @@ def message(request):
                       	  			'type' : 'text' ,
                 			}
      	   		})
-		elif (return_str == '노래 추천') and (category == 5):
 
+		elif (return_str == '노래 추천') and (category == 5):
+			terminal = True
 			return JsonResponse({
                 		'message': {
                     	    	'text': ' 오늘은 '+ rand(play_Handler.music_list) + ' 어떠세요?'
@@ -178,8 +306,8 @@ def message(request):
                 			}
      	   		})
 
-		elif (return_str == '갈곳 추천') and (category == 5):
-
+		elif (return_str == '장소 추천') and (category == 5):
+			terminal = True
 			return JsonResponse({
                 		'message': {
                     	    'text': ' 오늘은 ' + rand(play_Handler.place_list) + ' 가볼까요?'
@@ -201,6 +329,7 @@ def message(request):
 
 	elif (return_str in play_Handler.movie_genre) and (category == 2):
 		current_msg = return_str
+		terminal = True
 		return JsonResponse({
                 	'message': {
                     	'text': ' 오늘은 '+ rand(play_Handler.getMovie(return_str)) +' 어떠세요?'
@@ -208,6 +337,32 @@ def message(request):
                 		'keyboard': {
                       		'type' : 'text' ,
                 		}
+     	   	})
+
+	elif return_str == "좋아":
+		if terminal == True:
+			terminal = False
+			category = 0
+			return JsonResponse({
+                		'message': {
+                    		'text': ' 탁월한 선택이십니다. 이제 퇴근해도 되나요? '
+                			},
+                			'keyboard': {
+                      			'type' : 'text' ,
+                			}})
+
+
+
+
+		else:
+			return JsonResponse({
+                		'message': {
+                    		'text': ' 아..네ㅋ; '
+                			},
+                			'keyboard': {
+                      			'type' : 'text' ,
+                			}
+
      	   	})
 
 
