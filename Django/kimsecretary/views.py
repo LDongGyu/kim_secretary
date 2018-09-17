@@ -58,8 +58,10 @@ def message(request):
                 	}
      	   	})
 
-		else:
-			return_str = current_msg
+	play_Question = re.compile('(뭐|모|머)(하|할)') # 질문에 '하'가 들어가면 '놀 것 추천'
+
+	if return_str == "싫어":
+		return_str = current_msg
 
 	if return_str == '김비서!!!!!!!!':
 		current_msg = return_str
