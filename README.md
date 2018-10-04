@@ -4,6 +4,8 @@
 
 >캬카오톡 플러스친구에서 **'김비서'** 를 검색해보세요!
 
+![kim](https://user-images.githubusercontent.com/34343170/46469170-95e8eb80-c80d-11e8-9ff8-0ad1d339f3fd.png)
+
 ## 사용 툴  
 1. 파이썬
 2. Django  
